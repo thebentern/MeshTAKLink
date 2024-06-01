@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeshTAKLink.Service", "MeshTAKLink.Service.csproj", "{8CFA7F13-AE69-4D00-B606-B4560A74BBD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeshTAKLink.Core", "..\MeshTAKLink.Core\MeshTAKLink.Core.csproj", "{BB9E6323-E637-41CC-B824-386E1EDE7A38}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tak.Client", "..\Tak.Client\Tak.Client.csproj", "{47B1D83D-B984-4C32-9904-4D3EF4783EEF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tak.Client.Tests", "..\Tak.Client.Tests\Tak.Client.Tests.csproj", "{3181F1F9-A69E-455E-AAAB-1515CDD395A1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8CFA7F13-AE69-4D00-B606-B4560A74BBD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CFA7F13-AE69-4D00-B606-B4560A74BBD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CFA7F13-AE69-4D00-B606-B4560A74BBD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CFA7F13-AE69-4D00-B606-B4560A74BBD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB9E6323-E637-41CC-B824-386E1EDE7A38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB9E6323-E637-41CC-B824-386E1EDE7A38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB9E6323-E637-41CC-B824-386E1EDE7A38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB9E6323-E637-41CC-B824-386E1EDE7A38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47B1D83D-B984-4C32-9904-4D3EF4783EEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47B1D83D-B984-4C32-9904-4D3EF4783EEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47B1D83D-B984-4C32-9904-4D3EF4783EEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47B1D83D-B984-4C32-9904-4D3EF4783EEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3181F1F9-A69E-455E-AAAB-1515CDD395A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3181F1F9-A69E-455E-AAAB-1515CDD395A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3181F1F9-A69E-455E-AAAB-1515CDD395A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3181F1F9-A69E-455E-AAAB-1515CDD395A1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA02A405-8BA9-4A57-A572-BDA2D244BA81}
+	EndGlobalSection
+EndGlobal

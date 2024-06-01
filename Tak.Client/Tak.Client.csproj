@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>TheBentern.Tak.Client</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageId>Tak.Client</PackageId>
+    <Title>Tak.Client</Title>
+    <IncludeSymbols>True</IncludeSymbols>
+    <Authors>Ben Meadors</Authors>
+    <Company>TheBentern</Company>
+    <PackageDescription>A simple C# client for asynchronously consuming CoT events from a TAK Server over SSL</PackageDescription>
+    <RepositoryUrl>https://github.com/thebentern/Tak.Client</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="dpp.cot" Version="1.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
