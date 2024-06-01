@@ -32,11 +32,16 @@ public class UplinkWorker(ILogger<UplinkWorker> logger, IConfiguration configura
             var container = await connection.WriteToRadio(wantConfig, async (fromRadio, stateContainer) =>
             {
                 // Handle incoming messages
+                var positionPacket = fromRadio.GetPayload<Position>();
+                if (positionPacket != null)
+                {
+                    await ForwardToTakServer(fromRadio, stateContainer);
+                }
                 var takPacket = fromRadio.GetPayload<TAKPacket>();
-                if (takPacket == null || takPacket.IsCompressed)
-                    return false;
-
-                await ForwardToTakServer(fromRadio, stateContainer);
+                if (takPacket != null && !takPacket.IsCompressed && takPacket.PayloadVariantCase == TAKPacket.PayloadVariantOneofCase.Pli)
+                {
+                    await ForwardToTakServer(fromRadio, stateContainer);
+                }
                 return false;
             });
 

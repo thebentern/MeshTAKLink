@@ -23,10 +23,10 @@ public class FromRadioCotPacketConverter
     {
         CotPacket? packet = null;
 
-        if (fromRadio.GetPayload<Position>() != null)
+        if (fromRadio.GetPayload<Position>() != null || fromRadio.GetPayload<TAKPacket>() != null)
             packet = GetPositionPacket();
-        else if (fromRadio.GetPayload<string>() != null)
-            packet = GetChatPacket();
+        //else if (fromRadio.GetPayload<string>() != null)
+        //    packet = GetChatPacket();
 
         return packet;
     }
@@ -34,83 +34,98 @@ public class FromRadioCotPacketConverter
     public CotPacket GetPositionPacket()
     {
         var time = DateTime.UtcNow;
-        var position = fromRadio.GetPayload<Position>()!;
+        var position = fromRadio.GetPayload<Position>();
+        var takPacket = fromRadio.GetPayload<TAKPacket>();
+        
+        var lat = position == null ? Math.Round(takPacket!.Pli.LatitudeI * 1e-7, 7) : Math.Round(position.LatitudeI * 1e-7, 7);
+        var lon = position == null ? Math.Round(takPacket!.Pli.LongitudeI * 1e-7, 7) : Math.Round(position.LongitudeI * 1e-7, 7);
+        var hae = position == null ? takPacket!.Pli.Altitude : position.AltitudeHae;
 
         var message = new Message()
         {
             Event = new Event()
             {
-                Uid = AllChatRoomsUid,
-                Type = "a-f-G-E-V-C",
-                How = "m-g",
-                Time = time,
-                Start = time,
-                Stale = time.AddMinutes(2),
-                Point = new Point()
-                {
-                    Lat = Math.Round(position.LatitudeI * 1e-7, 7),
-                    Lon = Math.Round(position.LongitudeI * 1e-7, 7),
-                    Hae = position.AltitudeHae
-                },
-                Detail = new Detail()
-                {
-                    Contact = new dpp.cot.Contact() { Callsign = GetCallsign() },
-                    PrecisionLocation = null,
-                    Takv = GetTakv(),
-                    Group = null,
-                    Status = null,
-                    Track = null,
-                },
-                Version = "2.0"
-            }
-        };
-        var xml = new XmlDocument();
-        xml.LoadXml(message.ToXmlString());
-
-        return new CotPacket(message.Event, xml);
-    }
-    public CotPacket GetChatPacket()
-    {
-        var messageId = Guid.NewGuid().ToString();
-        var time = DateTime.UtcNow;
-
-        var message = new Message()
-        {
-            Event = new Event()
-            {
-                Uid = $"GeoChat.{AllChatRoomsUid}.AllChatRooms.{messageId}",
-                Type = "b-t-f",
+                Uid = takPacket?.Contact?.DeviceCallsign ?? $"MESH-{fromRadio.Packet.From}",
+                Type = "a-f-G-U-C",
                 How = "h-g-i-g-o",
                 Time = time,
                 Start = time,
                 Stale = time.AddMinutes(15),
-                Point = new Point() { Lat = 0, Lon = 0 },
+                Point = new Point()
+                {
+                    Lat = lat,
+                    Lon = lon,
+                    Hae = hae,
+                },
                 Detail = new Detail()
                 {
-                    Contact = new dpp.cot.Contact() { Callsign = GetCallsign() },
+                    Contact = new dpp.cot.Contact() 
+                    { 
+                        Callsign = takPacket?.Contact?.Callsign ?? GetCallsign(),
+                    },
                     PrecisionLocation = null,
                     Takv = GetTakv(),
-                    Group = null,
-                    Status = null,
+                    Group = new dpp.cot.Group() 
+                    { 
+                        Name = takPacket?.Group?.Team.ToString() ?? "Blue", 
+                        Role = takPacket?.Group?.Role.ToString() ?? "Team Member"
+                    },
+                    Status = new dpp.cot.Status()
+                    {
+                        Battery = takPacket?.Status?.Battery ?? 0,
+                    },
                     Track = null,
                 },
                 Version = "2.0"
             }
         };
-
         var xml = new XmlDocument();
-
-        var chatElement = GetChatElement(messageId, xml);
-        var remarksElement = GetRemarksElement(xml, fromRadio.GetPayload<string>() ?? String.Empty);
-        var linkElement = GetLinkElement(xml);
-
         xml.LoadXml(message.ToXmlString());
-        xml.GetElementsByTagName("detail")[0]!.AppendChild(chatElement);
-        xml.GetElementsByTagName("detail")[0]!.AppendChild(remarksElement);
-        xml.GetElementsByTagName("detail")[0]!.AppendChild(linkElement);
 
         return new CotPacket(message.Event, xml);
     }
+    //public CotPacket GetChatPacket()
+    //{
+    //    var messageId = Guid.NewGuid().ToString();
+    //    var time = DateTime.UtcNow;
+
+    //    var message = new Message()
+    //    {
+    //        Event = new Event()
+    //        {
+    //            Uid = $"GeoChat.{AllChatRoomsUid}.AllChatRooms.{messageId}",
+    //            Type = "b-t-f",
+    //            How = "h-g-i-g-o",
+    //            Time = time,
+    //            Start = time,
+    //            Stale = time.AddMinutes(15),
+    //            Point = new Point() { Lat = 0, Lon = 0 },
+    //            Detail = new Detail()
+    //            {
+    //                Contact = new dpp.cot.Contact() { Callsign = GetCallsign() },
+    //                PrecisionLocation = null,
+    //                Takv = GetTakv(),
+    //                Group = null,
+    //                Status = null,
+    //                Track = null,
+    //            },
+    //            Version = "2.0"
+    //        }
+    //    };
+
+    //    var xml = new XmlDocument();
+
+    //    var chatElement = GetChatElement(messageId, xml);
+    //    var remarksElement = GetRemarksElement(xml, fromRadio.GetPayload<string>() ?? String.Empty);
+    //    var linkElement = GetLinkElement(xml);
+
+    //    xml.LoadXml(message.ToXmlString());
+    //    xml.GetElementsByTagName("detail")[0]!.AppendChild(chatElement);
+    //    xml.GetElementsByTagName("detail")[0]!.AppendChild(remarksElement);
+    //    xml.GetElementsByTagName("detail")[0]!.AppendChild(linkElement);
+
+    //    return new CotPacket(message.Event, xml);
+    //}
 
     private string GetCallsign()
     {
